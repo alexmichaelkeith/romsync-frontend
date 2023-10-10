@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-//mport { AuthService } from '../auth.service'; // Import your authentication service here
+import { AuthService } from 'src/app/AuthService';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -7,8 +8,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  username: string = '';
+  constructor(private authService: AuthService, private router: Router) {}
 
+  username: string | null = this.authService.getToken();
+  
+  onLogOut = () => {
+    this.authService.removeToken()
+    this.router.navigate(['login']);
+  }
 
   ngOnInit() {
     

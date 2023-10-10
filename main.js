@@ -42,6 +42,7 @@ app.on("ready", () => {
 	event.preventDefault();
     minimizeApp();
   });
+
 });
 
 app.on("window-all-closed", () => {
