@@ -12,6 +12,7 @@ export class SignupComponent {
 
   email: string = '';
   password: string = '';
+  error_message: string = '';
 
   onSubmit() {
     fetch(
@@ -30,8 +31,7 @@ export class SignupComponent {
         this.router.navigate(['login'])
       })
       .catch(async err => {
-        const body = await err.json();
-        console.log(body);
+        this.error_message = await err.json();
       });
   }
 }

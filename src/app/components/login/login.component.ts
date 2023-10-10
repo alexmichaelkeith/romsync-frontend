@@ -13,6 +13,7 @@ export class LoginComponent {
 
   email: string = '';
   password: string = '';
+  error_message: string = '';
   
   onSubmit() {
       fetch(
@@ -35,7 +36,7 @@ export class LoginComponent {
           this.router.navigate(['']);
         })
         .catch(async err => {
-          const body = await err;
+          this.error_message = await err.json();
         });
   }
 

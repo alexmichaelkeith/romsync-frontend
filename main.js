@@ -8,7 +8,7 @@ app.on("ready", () => {
   mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
-    show: false, // Initially hide the window
+    show: true, // Initially hide the window
     webPreferences: {
       nodeIntegration: true
     },
@@ -40,7 +40,7 @@ app.on("ready", () => {
 
   mainWindow.on('minimize', (event) => {
 	event.preventDefault();
-    minimizeApp();
+    //minimizeApp();
   });
 
 });
