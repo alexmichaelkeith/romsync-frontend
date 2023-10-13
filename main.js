@@ -1,16 +1,8 @@
 const { app, BrowserWindow, Tray, ipcMain } = require("electron");
-//import {app, BrowserWindow, Tray, ipcMain } from "electron"
-//import { path } from 'path'
-//import { fs } from 'fs'
 const path = require("path");
 const fs = require('fs');
-//import { API_URL } from 'src/app/constants';
-//let mainWindow: any;
+
 let tray;
-
-
-
-
 
 app.on("ready", () => {
   let mainWindow = new BrowserWindow({
@@ -53,17 +45,6 @@ app.on("ready", () => {
     app.quit();
   });
 
-
-
-// Schedule directory scanning every minute
-setInterval(() => {
-  console.log('croning')
-  //scanDirectory();
-}, 10000); // 100000 milliseconds = 10 seconds
-
-
-
-
 });
 
 app.on("window-all-closed", () => {
@@ -72,7 +53,6 @@ app.on("window-all-closed", () => {
 
 
 
-
 ipcMain.on('scan-directory', (event, directoryPath) => {
-  //scanDirectory();
+  scanDirectory(directoryPath);
 });
