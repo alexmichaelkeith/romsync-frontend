@@ -1,50 +1,78 @@
-const { app, BrowserWindow, Tray } = require("electron");
+const { app, BrowserWindow, Tray, ipcMain } = require("electron");
+//import {app, BrowserWindow, Tray, ipcMain } from "electron"
+//import { path } from 'path'
+//import { fs } from 'fs'
 const path = require("path");
-
-let mainWindow;
+const fs = require('fs');
+//import { API_URL } from 'src/app/constants';
+//let mainWindow: any;
 let tray;
 
+
+
+
+
 app.on("ready", () => {
-  mainWindow = new BrowserWindow({
+  let mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
-    show: true, // Initially hide the window
+    show: true,
     webPreferences: {
-      nodeIntegration: true
+      preload: path.join(__dirname, "src/preload.js")
     },
-    skipTaskbar: true
+    resizable: false,
+    skipTaskbar: true,
+    frame: false
   });
-  
+
   app.dock.hide();
-  // Load your Angular app's index.html
   mainWindow.loadFile(
     path.join(__dirname, "dist", "romfrontend", "index.html")
   );
 
-  // Create a system tray icon
   tray = new Tray(path.join(__dirname, "./src/assets/xxxTemplate.png"));
-  tray.setIgnoreDoubleClickEvents(true)
-
+  tray.setIgnoreDoubleClickEvents(true);
 
   const minimizeApp = () => {
-	if (mainWindow.isVisible()) {
-		mainWindow.hide();
-	  } else {
-		mainWindow.show();
-	  }
-  }
+    if (mainWindow.isVisible()) {
+      mainWindow.hide();
+    } else {
+      mainWindow.show();
+    }
+  };
 
   tray.on("click", () => {
     minimizeApp();
   });
 
-  mainWindow.on('minimize', (event) => {
-	event.preventDefault();
-    //minimizeApp();
+  ipcMain.on("minimize-main-window", (event) => {
+    minimizeApp();
   });
+
+  ipcMain.on("close-main-window", (event) => {
+    app.quit();
+  });
+
+
+
+// Schedule directory scanning every minute
+setInterval(() => {
+  console.log('croning')
+  //scanDirectory();
+}, 10000); // 100000 milliseconds = 10 seconds
+
+
+
 
 });
 
 app.on("window-all-closed", () => {
   app.quit();
+});
+
+
+
+
+ipcMain.on('scan-directory', (event, directoryPath) => {
+  //scanDirectory();
 });

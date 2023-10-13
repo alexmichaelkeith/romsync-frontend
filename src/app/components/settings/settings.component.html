@@ -1,0 +1,39 @@
+<div class="settingsPage">
+    <div class="navbar">
+        <a routerLink="">Exit Settings</a>
+        {{test}}
+        <div class="nav" (click)="onNavClick('General')">
+            <div class="icon">
+            </div>
+            <div class="text">
+                General
+            </div>
+        </div>
+        <div class="nav" (click)="onNavClick('Appearance')">
+            <div class="icon">
+            </div>
+            <div class="text">
+                Appearance
+            </div>
+        </div>
+        <div class="nav" (click)="onNavClick('File System')">
+            <div class="icon">
+            </div>
+            <div class="text">
+                File System
+            </div>
+        </div>
+        <div class="nav" (click)="onNavClick('About')">
+            <div class="icon">
+            </div>
+            <div class="text">
+                About
+            </div>
+        </div>
+    </div>
+    <div class="settings">
+        <app-settings-selector [selected]="this.selectedOption"/>
+    </div>
+</div>
+
+

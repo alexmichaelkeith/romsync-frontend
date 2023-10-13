@@ -1,0 +1,16 @@
+<div>{{selected}}</div>
+<div *ngIf="selected == 'General'">General Settings Here</div>
+<div *ngIf="selected == 'Appearance'">Appearance Settings Here</div>
+<div *ngIf="selected == 'File System'">
+    
+
+    <div class="textSetting">
+        <p>Enter rom folder path: </p>
+        <input class="textInput"/>
+    </div>
+    
+    File System Settings Here
+
+</div>
+<div *ngIf="selected == 'About'">About Settings Here</div>
+
