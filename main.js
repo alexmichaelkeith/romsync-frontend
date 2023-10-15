@@ -1,7 +1,6 @@
 const { app, BrowserWindow, Tray, ipcMain } = require("electron");
 const path = require("path");
-const fs = require('fs');
-
+const { scanDirectory } = require('./electron-services/file-process')
 let tray;
 
 app.on("ready", () => {
@@ -10,13 +9,12 @@ app.on("ready", () => {
     height: 600,
     show: true,
     webPreferences: {
-      preload: path.join(__dirname, "src/preload.js")
+      preload: path.join(__dirname, "preload.js")
     },
     resizable: false,
     skipTaskbar: true,
     frame: false
   });
-
   app.dock.hide();
   mainWindow.loadFile(
     path.join(__dirname, "dist", "romfrontend", "index.html")
@@ -56,3 +54,18 @@ app.on("window-all-closed", () => {
 ipcMain.on('scan-directory', (event, directoryPath) => {
   scanDirectory(directoryPath);
 });
+
+// Main process
+ipcMain.handle('filesystem-scan', async (event, directoryPath) => {
+
+  async function someAsyncFunction() {
+    try {
+      const fileDetails = await scanDirectory(directoryPath);
+      return fileDetails
+    } catch (err) {
+      console.log(err)
+      return []
+  }}
+
+  return someAsyncFunction()
+})
