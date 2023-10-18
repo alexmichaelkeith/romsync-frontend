@@ -1,6 +1,6 @@
 const { app, BrowserWindow, Tray, ipcMain } = require("electron");
 const path = require("path");
-const { scanDirectory } = require('./electron-services/file-process')
+const { scanDirectory, createFile, removeFile, readFile } = require('./electron-services/file-process')
 let tray;
 
 app.on("ready", () => {
@@ -51,14 +51,11 @@ app.on("window-all-closed", () => {
 
 
 
-ipcMain.on('scan-directory', (event, directoryPath) => {
-  scanDirectory(directoryPath);
-});
+
 
 // Main process
-ipcMain.handle('filesystem-scan', async (event, directoryPath) => {
-
-  async function someAsyncFunction() {
+ipcMain.handle('scan-files', async (event, directoryPath) => {
+  async function scanFiles() {
     try {
       const fileDetails = await scanDirectory(directoryPath);
       return fileDetails
@@ -66,6 +63,42 @@ ipcMain.handle('filesystem-scan', async (event, directoryPath) => {
       console.log(err)
       return []
   }}
+  return scanFiles()
+})
 
-  return someAsyncFunction()
+
+
+ipcMain.handle('create-file', async (event, fileName) => {
+  async function scanFiles() {
+    try {
+      const fileDetails = await createFile(fileName);
+      return fileDetails
+    } catch (err) {
+      console.log(err)
+      return []
+  }}
+  return scanFiles()
+})
+
+ipcMain.handle('create-remote', async (event, directoryPath) => {
+
+async function create() {
+  const directoryPath = '/Users/alexkeith/roms';
+  const fileName = 'example.txt';
+  const fileContent = 'This is the content of the file.';
+  return 
+
+}})
+
+
+ipcMain.handle('read-file', async (event, path) => {
+
+  async function read(path) {
+    try {
+      return await readFile(path);
+    } catch (err) {
+      console.log(err)
+      return []
+  }}
+  return read(path)
 })

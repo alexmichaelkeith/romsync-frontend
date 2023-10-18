@@ -4,6 +4,15 @@
       Log Out
     </div>
     <a routerLink="/settings">Go to settings</a>
-<div (click)="onClick()">Test</div>
-{{this.files}}
-  </div>
+<div (click)="onDiff()">Get Differences</div>
+
+{{this.localFiles}}
+========================
+{{this.remoteFiles}}
+=======================
+<ul>
+  <li *ngFor="let action of actions">{{ action.fileName }} [{{action.action}}]</li>
+</ul>
+==============
+
+<div (click)="onSync()">Sync Diff</div>
