@@ -1,6 +1,11 @@
 const { app, BrowserWindow, Tray, ipcMain } = require("electron");
 const path = require("path");
-const { scanDirectory, createFile, removeFile, readFile } = require('./electron-services/file-process')
+const {
+  scanDirectory,
+  createFile,
+  removeFile,
+  readFile
+} = require("./electron-services/file-process");
 let tray;
 
 app.on("ready", () => {
@@ -35,59 +40,54 @@ app.on("ready", () => {
     minimizeApp();
   });
 
-  ipcMain.on("minimize-main-window", (event) => {
+  ipcMain.on("minimize-main-window", event => {
     minimizeApp();
   });
 
-  ipcMain.on("close-main-window", (event) => {
+  ipcMain.on("close-main-window", event => {
     app.quit();
   });
-
 });
 
 app.on("window-all-closed", () => {
   app.quit();
 });
 
-
-
-
-
 // Main process
-ipcMain.handle('scan-files', async (event, directoryPath) => {
+ipcMain.handle("scan-files", async (event, directoryPath) => {
   async function scanFiles() {
     try {
       const fileDetails = await scanDirectory(directoryPath);
-      return fileDetails
+      return fileDetails;
     } catch (err) {
-      console.log(err)
-      return []
-  }}
-  return scanFiles()
-})
+      console.log(err);
+      return [];
+    }
+  }
+  return scanFiles();
+});
 
-
-
-ipcMain.handle('create-file', async (event, fileDetails) => {
+ipcMain.handle("create-file", async (event, fileDetails) => {
   async function scanFiles() {
     try {
       await createFile(fileDetails);
-      return 'done'
+      return "done";
     } catch (err) {
-      console.log(err)
-      return []
-  }}
-  return scanFiles()
-})
+      console.log(err);
+      return [];
+    }
+  }
+  return scanFiles();
+});
 
-ipcMain.handle('read-file', async (event, path) => {
-
+ipcMain.handle("read-file", async (event, path) => {
   async function read(path) {
     try {
       return await readFile(path);
     } catch (err) {
-      console.log(err)
-      return []
-  }}
-  return read(path)
-})
+      console.log(err);
+      return [];
+    }
+  }
+  return read(path);
+});

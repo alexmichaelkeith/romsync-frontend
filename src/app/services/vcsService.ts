@@ -1,12 +1,16 @@
 import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
 import { API_URL } from '../constants';
+import { SettingsService } from './settings.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class VCSService {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private settingsService: SettingsService
+  ) {}
 
   username: string | null = this.authService.getToken();
   localFiles: any;
@@ -15,25 +19,18 @@ export class VCSService {
 
   onScan = async () => {
     const ipcRenderer = (window as any).electron.ipcRenderer;
-    const directoryPath = '/Users/alexkeith/roms';
-    ipcRenderer.invoke('scan-files', directoryPath).then((result: any) => {
-      this.localFiles = result;
-    });
+    ipcRenderer
+      .invoke('scan-files', this.settingsService.getSetting('directory'))
+      .then((result: any) => {
+        this.localFiles = result;
+      });
   };
 
   onRemote = async () => {
-    await fetch(
-      API_URL +
-        '/data?' +
-        new URLSearchParams({
-          directory: 'akeithx',
-          authorization: this.authService.getToken() || ''
-        }),
-      {
-        method: 'get',
-        headers: { authorization: this.authService.getToken() || '' }
-      }
-    )
+    await fetch(API_URL + '/data?', {
+      method: 'get',
+      headers: { authorization: this.authService.getToken() || '' }
+    })
       .then(res => {
         if (!res.ok) {
           throw res;
@@ -87,7 +84,8 @@ export class VCSService {
     const ipcRenderer = (window as any).electron.ipcRenderer;
     const fileDetails = {
       fileName: action.fileName,
-      authorization: this.authService.getToken()
+      authorization: this.authService.getToken(),
+      path: this.settingsService.getSetting('directory') + '/' + action.fileName
     };
     ipcRenderer.invoke('create-file', fileDetails).then((res: any) => {});
   };

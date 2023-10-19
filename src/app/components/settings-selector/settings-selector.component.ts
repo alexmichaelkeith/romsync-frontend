@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { SettingsService } from 'src/app/services/settings.service';
 
 @Component({
   selector: 'app-settings-selector',
@@ -6,11 +7,14 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./settings-selector.component.scss']
 })
 export class SettingsSelectorComponent {
+  constructor(private settingsService: SettingsService) {}
 
+  directory: string = this.settingsService.getSetting('directory');
 
-  
   @Input()
-    selected: string = 'General'
+  selected: string = 'General';
 
-    
+  onDirectorySetting() {
+    this.settingsService.saveSetting('directory', this.directory);
+  }
 }

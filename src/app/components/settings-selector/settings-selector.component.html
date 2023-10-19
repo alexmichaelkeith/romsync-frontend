@@ -1,16 +1,19 @@
-<div>{{selected}}</div>
+<div>{{ selected }}</div>
 <div *ngIf="selected == 'General'">General Settings Here</div>
 <div *ngIf="selected == 'Appearance'">Appearance Settings Here</div>
 <div *ngIf="selected == 'File System'">
-    
-
-    <div class="textSetting">
-        <p>Enter rom folder path: </p>
-        <input class="textInput"/>
+  <form (ngSubmit)="onDirectorySetting()">
+    <div class="form-group">
+      <label for="directory">Directory:</label>
+      <input
+        placeholder="{{ this.directory }}"
+        type="text"
+        id="email"
+        name="directory"
+        [(ngModel)]="this.directory"
+      />
     </div>
-    
-    File System Settings Here
-
+    <button type="submit">Submit</button>
+  </form>
 </div>
 <div *ngIf="selected == 'About'">About Settings Here</div>
-
