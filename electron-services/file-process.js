@@ -10,7 +10,7 @@ async function createFile(fileDetails) {
   axios({
     method: "get",
     url:
-      "http://localhost:5000/rombackend/us-central1/app/data?directory=akeithx&authorization=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFsZXgubWljaGFlbC5rZWl0aEBnbWFpbC5jb20iLCJpYXQiOjE2OTY4ODgzNjV9.LXfwDA8aaCcWAk65HNdudjhVIzTJUy73xGiPvxUJkBo&fileName=Super Mario 64 DS2.nds",
+      "http://localhost:5000/rombackend/us-central1/app/data",
     responseType: "stream",
     headers: {
       filename: fileDetails.fileName,
@@ -25,7 +25,6 @@ async function createFile(fileDetails) {
       response.headers.createdtime,
       "ddd MMM DD YYYY HH:mm:ss [GMT]ZZ [(]z[)]"
     ).toDate();
-    console.log(ctime, response.headers.createdtime);
     // Write data to your file
     pathToFile = "/Users/alexkeith/roms/" + fileDetails.fileName;
     fs.promises

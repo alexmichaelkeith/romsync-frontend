@@ -67,6 +67,7 @@ export class VCSService {
             enctype: 'application/octet-stream',
             fileName: action.fileName,
             user: 'akeithx',
+            authorization: this.authService.getToken() || '',
             lastModified: action.lastModified,
             createdtime: action.createdtime
           }
