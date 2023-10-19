@@ -1,7 +1,11 @@
 const fs = require("fs");
 const path = require("path");
 const axios = require("axios");
+const moment = require("moment");
+const util = require("util");
+const utimes = util.promisify(require("utimes").utimes);
 // Function to create a file within a directory
+
 async function createFile(fileDetails) {
   axios({
     method: "get",
@@ -13,9 +17,32 @@ async function createFile(fileDetails) {
       authorization: fileDetails.authorization
     }
   }).then(function(response) {
-    response.data.pipe(
-      fs.createWriteStream("/Users/alexkeith/roms/" + fileDetails.fileName)
-    );
+    const mtime = moment(
+      response.headers.lastmodified,
+      "ddd MMM DD YYYY HH:mm:ss [GMT]ZZ [(]z[)]"
+    ).toDate();
+    const ctime = moment(
+      response.headers.createdtime,
+      "ddd MMM DD YYYY HH:mm:ss [GMT]ZZ [(]z[)]"
+    ).toDate();
+    console.log(ctime, response.headers.createdtime);
+    // Write data to your file
+    pathToFile = "/Users/alexkeith/roms/" + fileDetails.fileName;
+    fs.promises
+      .writeFile(pathToFile, response.data)
+      .then(() => {
+        // Use utimes to set the new modified time
+        return fs.promises.stat(pathToFile);
+      })
+      .then(stats => {
+        return utimes(pathToFile, ctime, mtime);
+      })
+      .then(() => {
+        console.log("File times updated successfully!");
+      })
+      .catch(err => {
+        console.error(err);
+      });
   });
 }
 
@@ -73,12 +100,12 @@ async function scanDirectory(directoryPath) {
     for (const file of files) {
       const filePath = path.join(directoryPath, file);
       const stats = await fs.promises.stat(filePath);
-
-      if (stats.isFile()) {
+      if (stats.isFile() && file[0] != ".") {
         fileDetails.push({
           fileName: file,
           path: filePath,
           lastModified: stats.mtime.toString(),
+          createdtime: stats.birthtime.toString(), //possible issue on linux
           fileSizeBytes: stats.size
         });
       }

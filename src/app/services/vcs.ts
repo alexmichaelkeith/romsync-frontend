@@ -29,7 +29,10 @@ export class VCSService {
           directory: 'akeithx',
           authorization: this.authService.getToken() || ''
         }),
-      { method: 'get' , headers: {authorization: this.authService.getToken() || ''}}
+      {
+        method: 'get',
+        headers: { authorization: this.authService.getToken() || '' }
+      }
     )
       .then(res => {
         if (!res.ok) {
@@ -55,7 +58,6 @@ export class VCSService {
         const blob = new Blob([fileDetails.file], {
           type: 'application/octet-stream'
         });
-
         // Append the file data to FormData
         formData.append('file', blob, action.fileName);
         fetch(API_URL + '/data', {
@@ -65,7 +67,8 @@ export class VCSService {
             enctype: 'application/octet-stream',
             fileName: action.fileName,
             user: 'akeithx',
-            lastModified: action.lastModified
+            lastModified: action.lastModified,
+            createdtime: action.createdtime
           }
         })
           .then(res => {
@@ -81,11 +84,11 @@ export class VCSService {
 
   pull = async (action: any) => {
     const ipcRenderer = (window as any).electron.ipcRenderer;
-    const fileDetails = {fileName: action.fileName,authorization: this.authService.getToken()}
-    ipcRenderer
-      .invoke('create-file', fileDetails)
-      .then((res: any) => {
-      });
+    const fileDetails = {
+      fileName: action.fileName,
+      authorization: this.authService.getToken()
+    };
+    ipcRenderer.invoke('create-file', fileDetails).then((res: any) => {});
   };
 
   generateDiffActions = async () => {
@@ -119,7 +122,8 @@ export class VCSService {
         action: 'push',
         fileName: file.fileName,
         path: file.path,
-        lastModified: file.lastModified
+        lastModified: file.lastModified,
+        createdtime: file.createdtime
       });
     });
 
@@ -129,7 +133,8 @@ export class VCSService {
         action: 'pull',
         fileName: file.fileName,
         path: file.path,
-        lastModified: file.lastModified
+        lastModified: file.lastModified,
+        createdtime: file.createdtime
       });
     });
     return this.actions;
