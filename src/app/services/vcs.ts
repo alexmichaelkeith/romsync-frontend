@@ -29,7 +29,7 @@ export class VCSService {
           directory: 'akeithx',
           authorization: this.authService.getToken() || ''
         }),
-      { method: 'get' }
+      { method: 'get' , headers: {authorization: this.authService.getToken() || ''}}
     )
       .then(res => {
         if (!res.ok) {
@@ -72,7 +72,6 @@ export class VCSService {
             if (!res.ok) {
               throw res;
             }
-            console.log(res);
           })
           .catch(async err => {
             console.log(await err);
@@ -82,11 +81,10 @@ export class VCSService {
 
   pull = async (action: any) => {
     const ipcRenderer = (window as any).electron.ipcRenderer;
-    console.log(action)
+    const fileDetails = {fileName: action.fileName,authorization: this.authService.getToken()}
     ipcRenderer
-      .invoke('create-file', action.fileName)
+      .invoke('create-file', fileDetails)
       .then((res: any) => {
-        console.log(res);
       });
   };
 

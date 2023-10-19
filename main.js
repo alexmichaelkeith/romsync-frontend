@@ -68,28 +68,17 @@ ipcMain.handle('scan-files', async (event, directoryPath) => {
 
 
 
-ipcMain.handle('create-file', async (event, fileName) => {
+ipcMain.handle('create-file', async (event, fileDetails) => {
   async function scanFiles() {
     try {
-      const fileDetails = await createFile(fileName);
-      return fileDetails
+      await createFile(fileDetails);
+      return 'done'
     } catch (err) {
       console.log(err)
       return []
   }}
   return scanFiles()
 })
-
-ipcMain.handle('create-remote', async (event, directoryPath) => {
-
-async function create() {
-  const directoryPath = '/Users/alexkeith/roms';
-  const fileName = 'example.txt';
-  const fileContent = 'This is the content of the file.';
-  return 
-
-}})
-
 
 ipcMain.handle('read-file', async (event, path) => {
 

@@ -2,18 +2,19 @@ const fs = require("fs");
 const path = require("path");
 const axios = require("axios");
 // Function to create a file within a directory
-async function createFile(fileName) {
+async function createFile(fileDetails) {
   axios({
     method: "get",
     url:
       "http://localhost:5000/rombackend/us-central1/app/data?directory=akeithx&authorization=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFsZXgubWljaGFlbC5rZWl0aEBnbWFpbC5jb20iLCJpYXQiOjE2OTY4ODgzNjV9.LXfwDA8aaCcWAk65HNdudjhVIzTJUy73xGiPvxUJkBo&fileName=Super Mario 64 DS2.nds",
     responseType: "stream",
     headers: {
-      filename: fileName
+      filename: fileDetails.fileName,
+      authorization: fileDetails.authorization
     }
   }).then(function(response) {
     response.data.pipe(
-      fs.createWriteStream("/Users/alexkeith/roms/" + fileName)
+      fs.createWriteStream("/Users/alexkeith/roms/" + fileDetails.fileName)
     );
   });
 }
