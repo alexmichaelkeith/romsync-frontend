@@ -7,7 +7,6 @@ const utimes = util.promisify(require("utimes").utimes);
 // Function to create a file within a directory
 
 async function createFile(fileDetails) {
-  console.log(fileDetails,'creating')
   axios({
     method: "get",
     url:
@@ -18,7 +17,6 @@ async function createFile(fileDetails) {
       authorization: fileDetails.authorization
     }
   }).then(function(response) {
-    console.log(response.headers)
     const mtime = moment(
       response.headers.lastmodified,
       "ddd MMM DD YYYY HH:mm:ss [GMT]ZZ [(]z[)]"
@@ -49,13 +47,9 @@ async function createFile(fileDetails) {
 
 // Function to read and return the content of a file
 async function readFile(path) {
-  let fileDetails = {};
-  console.log('read',path)
-
   function getFileDetails(path) {
     return new Promise((resolve, reject) => {
       const fileDetails = {};
-
       fs.readFile(path, (err, file) => {
         if (err) {
           console.error(err);
@@ -95,7 +89,6 @@ async function removeFile(directoryPath, fileName) {
 }
 
 async function scanDirectory(directoryPath) {
-  console.log('scan',directoryPath)
   try {
     const files = await fs.promises.readdir(directoryPath);
     const fileDetails = [];
@@ -103,7 +96,6 @@ async function scanDirectory(directoryPath) {
     for (const file of files) {
       const filePath = path.join(directoryPath, file);
       const stats = await fs.promises.stat(filePath);
-      console.log(stats)
       if (stats.isFile() && file[0] != ".") {
         fileDetails.push({
           fileName: file,

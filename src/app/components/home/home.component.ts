@@ -11,8 +11,6 @@ export class HomeComponent implements OnInit {
   constructor(private authService: AuthService, private router: Router, private vcsService: VCSService) {}
 
   username: string | null = this.authService.getToken();
-  localFiles: any
-  remoteFiles: any
   actions: any
   
   onSync() {
@@ -27,20 +25,16 @@ export class HomeComponent implements OnInit {
 
   }
 
-  onScan() {
-
-  }
-
-  onRemote() {
-
-  }
-
   onDiff = async () => {
     this.actions = await this.vcsService.generateDiffActions()
   }
 
   ngOnInit() {
     
+  }
+
+  getVcsService() {
+    return this.vcsService;
   }
 
   onLogOut = () => {
