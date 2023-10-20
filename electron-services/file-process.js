@@ -65,7 +65,7 @@ async function readFile(path) {
             return;
           }
           fileDetails.stats = stats;
-
+          
           resolve(fileDetails);
         });
       });

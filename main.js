@@ -8,6 +8,11 @@ const {
 } = require("./electron-services/file-process");
 let tray;
 
+let isWin = process.platform === "win32"
+let isMac = process.platform === "darwin"
+let IsLin = process.platform === "linux"
+
+
 app.on("ready", () => {
   let mainWindow = new BrowserWindow({
     width: 800,
@@ -20,7 +25,9 @@ app.on("ready", () => {
     skipTaskbar: true,
     frame: false
   });
+  if (isMac) {
   app.dock.hide();
+  }
   mainWindow.loadFile(
     path.join(__dirname, "dist", "romfrontend", "index.html")
   );
