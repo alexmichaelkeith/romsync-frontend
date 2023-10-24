@@ -9,6 +9,8 @@ import { HomeComponent } from './components/home/home.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { SettingsSelectorComponent } from './components/settings-selector/settings-selector.component';
 import { HeaderComponent } from './components/header/header.component';
+import { vcService } from './services/vcService';
+import { CronService } from './services/cron-service';
 
 @NgModule({
   declarations: [
@@ -25,7 +27,7 @@ import { HeaderComponent } from './components/header/header.component';
     AppRoutingModule,
     FormsModule,
   ],
-  providers: [],
+  providers: [vcService,CronService],
   bootstrap: [AppComponent]
 })
 

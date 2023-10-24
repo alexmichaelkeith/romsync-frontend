@@ -8,18 +8,20 @@
 
 ==========Local Files==============
 <ul>
-  <li *ngFor="let file of getVcsService().localFiles">{{ file.fileName }}  {{ file.lastModified }}</li>
+  <li *ngFor="let file of getvcService().localFiles">{{ file.fileName }}  {{ file.lastModified }}</li>
 </ul>
 
 ==========Remote Files=============
 <ul>
-  <li *ngFor="let file of getVcsService().remoteFiles">{{ file.fileName }} [{{ file.lastModified }}]</li>
+  <li *ngFor="let file of getvcService().remoteFiles">{{ file.fileName }} [{{ file.lastModified }}]</li>
 </ul>
 ==========Actions=============
 
 <ul>
-  <li *ngFor="let action of actions">{{ action.fileName }} [{{ action.action }}]</li>
+  <li *ngFor="let action of getvcService().actions">{{ action.fileName }} [{{ action.action }}]</li>
 </ul>
 ========================
 
 <div (click)="onSync()">Sync Diff</div>
+
+<div (click)="onFullService()">Full Service</div>

@@ -15,5 +15,18 @@
     </div>
     <button type="submit">Submit</button>
   </form>
+  <form (ngSubmit)="onCronSetting()">
+    <div class="form-group">
+      <label for="cron">Timed scan in minutes:</label>
+      <input
+        placeholder="{{ this.cron }}"
+        type="text"
+        id="cron"
+        name="cron"
+        [(ngModel)]="this.cron"
+      />
+    </div>
+    <button type="submit">Submit</button>
+  </form>
 </div>
 <div *ngIf="selected == 'About'">About Settings Here</div>

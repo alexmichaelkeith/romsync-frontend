@@ -3,15 +3,13 @@ const path = require("path");
 const {
   scanDirectory,
   createFile,
-  removeFile,
   readFile
 } = require("./electron-services/file-process");
 let tray;
 
-let isWin = process.platform === "win32"
-let isMac = process.platform === "darwin"
-let IsLin = process.platform === "linux"
-
+let isWin = process.platform === "win32";
+let isMac = process.platform === "darwin";
+let IsLin = process.platform === "linux";
 
 app.on("ready", () => {
   let mainWindow = new BrowserWindow({
@@ -26,7 +24,7 @@ app.on("ready", () => {
     frame: false
   });
   if (isMac) {
-  app.dock.hide();
+    app.dock.hide();
   }
   mainWindow.loadFile(
     path.join(__dirname, "dist", "romfrontend", "index.html")
@@ -35,8 +33,8 @@ app.on("ready", () => {
   tray = new Tray(path.join(__dirname, "./src/assets/xxxTemplate.png"));
   tray.setIgnoreDoubleClickEvents(true);
 
-  const minimizeApp = () => {
-    if (mainWindow.isVisible()) {
+  const trayClick = () => {
+    if (mainWindow.isFocused()) {
       mainWindow.hide();
     } else {
       mainWindow.show();
@@ -44,7 +42,7 @@ app.on("ready", () => {
   };
 
   tray.on("click", () => {
-    minimizeApp();
+    trayClick();
   });
 
   ipcMain.on("minimize-main-window", event => {
@@ -61,30 +59,21 @@ app.on("window-all-closed", () => {
 });
 
 // Main process
-ipcMain.handle("scan-files", async (event, directoryPath) => {
-  async function scanFiles() {
-    try {
-      const fileDetails = await scanDirectory(directoryPath);
-      return fileDetails;
-    } catch (err) {
-      console.log(err);
-      return [];
-    }
-  }
-  return scanFiles();
+ipcMain.handle("scan-files", (event, directoryPath) => {
+  return new Promise((resolve, reject) => {
+    scanDirectory(directoryPath)
+    .then(res=>resolve(res))
+      .catch(err=>reject(err))
+  })
 });
 
 ipcMain.handle("create-file", async (event, fileDetails) => {
-  async function scanFiles() {
-    try {
-      await createFile(fileDetails);
-      return "done";
-    } catch (err) {
-      console.log(err);
-      return [];
-    }
+  try {
+    await createFile(fileDetails);
+    return 'File Created';
+  } catch (error) {
+    throw new Error('File not Created');
   }
-  return scanFiles();
 });
 
 ipcMain.handle("read-file", async (event, path) => {
