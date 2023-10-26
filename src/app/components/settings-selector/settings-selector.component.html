@@ -28,5 +28,29 @@
     </div>
     <button type="submit">Submit</button>
   </form>
+
+  <form (ngSubmit)="onAddUntrack()">
+    <div class="form-group">
+      <label for="untrack">Exclude Filetype:</label>
+      <input
+        type="text"
+        id="untrack"
+        name="untrack"
+        [(ngModel)]="this.filetype"
+      />
+    </div>
+    <button type="submit">Submit</button>
+    Excluded Filetypes
+    <div class="list">
+      <div class="file">
+        <div
+          *ngFor="let filetype of getVcService().filetypes"
+          (click)="onRemoveFiletype(filetype)"
+        >
+          {{ filetype }}
+        </div>
+      </div>
+    </div>
+  </form>
 </div>
 <div *ngIf="selected == 'About'">About Settings Here</div>

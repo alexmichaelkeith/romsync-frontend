@@ -60,10 +60,7 @@ app.on("window-all-closed", () => {
 
 ipcMain.handle("scan-files", async (event, directoryPath) => {
   try{
-    console.log('main about to scan')
-    const res = await scanDirectory(directoryPath)
-    console.log('main scanned')
-    return res
+    return await scanDirectory(directoryPath)
   }
   catch{
     err=>console.log(err)

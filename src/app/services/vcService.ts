@@ -17,7 +17,34 @@ export class vcService {
   remoteFiles: any;
   actions: any;
 
+  untracked: any;
+  tracked: any;
+  filetypes: any;
+
   ngOnInit() {}
+
+  untrack(file: any) {
+    this.tracked = this.tracked.filter(
+      (trackedFile: any) => trackedFile.fileName != file.fileName
+    );
+    this.untracked.push(file);
+    const serializedUntracked = JSON.stringify(this.untracked);
+    this.settingsService.saveSetting('untracked', serializedUntracked);
+  }
+
+  track(file: any) {
+    if (
+      !this.filetypes.includes(file.fileName.split('.').pop()) &&
+      !this.filetypes.includes('.' + file.fileName.split('.').pop())
+    ) {
+      this.untracked = this.untracked.filter(
+        (untrackedFile: any) => untrackedFile.fileName != file.fileName
+      );
+      this.tracked.push(file);
+      const serializedUntracked = JSON.stringify(this.untracked);
+      this.settingsService.saveSetting('untracked', serializedUntracked);
+    }
+  }
 
   onScan = () => {
     try {
@@ -110,6 +137,34 @@ export class vcService {
       await this.onScan();
       await this.onRemote();
       this.actions = [];
+      this.filetypes = JSON.parse(this.settingsService.getSetting('filetypes'));
+
+      const uniqueFiles: any = {};
+      this.localFiles.forEach((obj: any) => {
+        uniqueFiles[obj.fileName] = obj;
+      });
+      this.remoteFiles.forEach((obj: any) => {
+        uniqueFiles[obj.fileName] = obj;
+      });
+
+      this.untracked = JSON.parse(this.settingsService.getSetting('untracked'));
+      const untrackedNames = this.untracked.map((file: any) => file.fileName);
+      const combinedArray = Object.values(uniqueFiles);
+      this.tracked = combinedArray.filter(
+        (file: any) =>
+          !untrackedNames.includes(file.fileName) &&
+          !this.filetypes.includes(file.fileName.split('.').pop()) &&
+          !this.filetypes.includes('.' + file.fileName.split('.').pop())
+      );
+      const trackedNames = this.tracked.map((file: any) => file.fileName);
+
+      this.untracked = combinedArray.filter(
+        (file: any) =>
+          !trackedNames.includes(file.fileName) &&
+          (this.filetypes.includes(file.fileName.split('.').pop()) ||
+            this.filetypes.includes('.' + file.fileName.split('.').pop()))
+      );
+
       // Calculate files to push (local files not in the remote)
       const filesToPush = this.localFiles.filter(
         (localFile: any) =>
@@ -117,7 +172,7 @@ export class vcService {
             (remoteFile: any) =>
               remoteFile.fileName === localFile.fileName &&
               remoteFile.lastModified >= localFile.lastModified
-          )
+          ) && !untrackedNames.includes(localFile.fileName)
       );
 
       // Calculate files to pull (remote files not in the local)
@@ -127,7 +182,7 @@ export class vcService {
             (localFile: any) =>
               localFile.fileName === remoteFile.fileName &&
               localFile.lastModified >= remoteFile.lastModified
-          )
+          ) && !untrackedNames.includes(remoteFile.fileName)
       );
 
       // Add push actions to the diff array

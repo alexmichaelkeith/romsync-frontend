@@ -1,0 +1,91 @@
+.home-container {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  .listings {
+    display: flex;
+    height: 500px;
+    .tracked {
+      width: 33%;
+      background-color: lightgray;
+      .title {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: white;
+      }
+      .list {
+        height: 350px;
+        overflow-y: auto;
+        list-style: none;
+        .file {
+          cursor: pointer;
+        }
+      }
+    }
+    .actions {
+      width: 33%;
+      display: flex;
+      flex-direction: column;
+      .title {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .list {
+        height: 350px;
+        overflow-y: auto;
+        list-style: none;
+      }
+      .buttons {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        .refresh {
+          width: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background-color: lightgray;
+        }
+        .sync {
+          width: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background-color: lightgray;
+        }
+      }
+    }
+    .untracked {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 33%;
+      background-color: lightgray;
+      .title {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: white;
+        width: 100%;
+      }
+      .list {
+        height: 500px;
+        width: 100%;
+        list-style: none;
+        overflow-y: auto;
+        display: flex;
+
+        .file {
+          width: 75%;
+          //cursor: pointer;
+        }
+        .reason {
+          width: 25%;
+        }
+      }
+    }
+  }
+}

@@ -1,11 +1,9 @@
-
 import { Injectable } from '@angular/core';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class SettingsService {
-
   constructor() {}
 
   // Method to save the setting
@@ -15,7 +13,6 @@ export class SettingsService {
 
   // Method to retrieve the setting
   getSetting(key: string): string {
-    return localStorage.getItem(key) || "";
+    return localStorage.getItem(key) || '';
   }
-
 }

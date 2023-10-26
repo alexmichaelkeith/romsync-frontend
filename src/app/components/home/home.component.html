@@ -1,27 +1,55 @@
 <div class="home-container">
-    <h2>Welcome, {{ username }}!</h2>
-    <div class="logout" (click)="onLogOut()">
-      Log Out
+  <div class="settings">
+    <a routerLink="/settings">Settings</a>
+  </div>
+  <div class="listings">
+    <div class="tracked">
+      <div class="title">Tracked</div>
+      <ul class="list">
+        <li
+          class="file"
+          *ngFor="let file of getvcService().tracked"
+          (click)="onTrackedClick(file)"
+        >
+          {{ file.fileName }}
+        </li>
+      </ul>
     </div>
-    <a routerLink="/settings">Go to settings</a>
-<div (click)="onDiff()">Get Differences</div>
 
-==========Local Files==============
-<ul>
-  <li *ngFor="let file of getvcService().localFiles">{{ file.fileName }}  {{ file.lastModified }}</li>
-</ul>
+    <div class="actions">
+      <div class="title">Actions</div>
+      <ul class="list">
+        <li *ngFor="let action of getvcService().actions">
+          {{ action.fileName }} [{{ action.action }}]
+        </li>
+      </ul>
+      <div class="buttons">
+        <div class="refresh">
+          <div (click)="onDiff()">Manual Refresh</div>
+        </div>
+        <div class="sync">
+          <div (click)="onFullService()">Manual Sync</div>
+        </div>
+      </div>
+    </div>
 
-==========Remote Files=============
-<ul>
-  <li *ngFor="let file of getvcService().remoteFiles">{{ file.fileName }} [{{ file.lastModified }}]</li>
-</ul>
-==========Actions=============
-
-<ul>
-  <li *ngFor="let action of getvcService().actions">{{ action.fileName }} [{{ action.action }}]</li>
-</ul>
-========================
-
-<div (click)="onSync()">Sync Diff</div>
-
-<div (click)="onFullService()">Full Service</div>
+    <div class="untracked">
+      <div class="title">Untracked</div>
+      <div class="list">
+        <div class="file">
+          <div
+            *ngFor="let file of getvcService().untracked"
+            (click)="this.onUntrackedClick(file)"
+          >
+            {{ file.fileName }}
+          </div>
+        </div>
+        <div class="reason">
+          <div *ngFor="let file of getvcService().untracked">
+            {{ file.fileName }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
