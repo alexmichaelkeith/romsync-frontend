@@ -58,13 +58,16 @@ app.on("window-all-closed", () => {
   app.quit();
 });
 
-// Main process
-ipcMain.handle("scan-files", (event, directoryPath) => {
-  return new Promise((resolve, reject) => {
-    scanDirectory(directoryPath)
-    .then(res=>resolve(res))
-      .catch(err=>reject(err))
-  })
+ipcMain.handle("scan-files", async (event, directoryPath) => {
+  try{
+    console.log('main about to scan')
+    const res = await scanDirectory(directoryPath)
+    console.log('main scanned')
+    return res
+  }
+  catch{
+    err=>console.log(err)
+  }
 });
 
 ipcMain.handle("create-file", async (event, fileDetails) => {
@@ -82,7 +85,7 @@ ipcMain.handle("read-file", async (event, path) => {
       return await readFile(path);
     } catch (err) {
       console.log(err);
-      return [];
+      return;
     }
   }
   return read(path);

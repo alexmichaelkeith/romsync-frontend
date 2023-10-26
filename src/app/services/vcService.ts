@@ -20,20 +20,21 @@ export class vcService {
   ngOnInit() {}
 
   onScan = () => {
-    return new Promise((resolve, reject) => {
+    try {
       const ipcRenderer = (window as any).electron.ipcRenderer;
       ipcRenderer
         .invoke('scan-files', this.settingsService.getSetting('directory'))
-        .then((res: any) => {
+        .then((res: []) => {
           this.localFiles = res;
-          resolve((res: any) => resolve('Scan Succesful'));
-        })
-        .catch((err: any) => reject(err));
-    });
+          return;
+        });
+    } catch {
+      (err: any) => console.log(err);
+    }
   };
 
   onRemote = async () => {
-    return new Promise(async (resolve, reject) => {
+    try {
       await fetch(API_URL + '/data?', {
         method: 'get',
         headers: { authorization: this.authService.getToken() || '' }
@@ -46,25 +47,22 @@ export class vcService {
         })
         .then(fileDetails => {
           this.remoteFiles = fileDetails;
-          resolve('Remote Files Received');
-        })
-        .catch(async err => {
-          reject('Remote Files Not Received');
+          return;
         });
-    });
+    } catch {
+      (err: any) => console.log(err);
+    }
   };
 
   async push(action: any) {
     try {
       const ipcRenderer = (window as any).electron.ipcRenderer;
       const fileDetails = await ipcRenderer.invoke('read-file', action.path);
-
       const formData = new FormData();
       const blob = new Blob([fileDetails.file], {
         type: 'application/octet-stream'
       });
       formData.append('file', blob, action.fileName);
-
       const response = await fetch(API_URL + '/data', {
         method: 'POST',
         body: formData,
@@ -99,22 +97,19 @@ export class vcService {
           this.settingsService.getSetting('directory') + '/' + action.fileName
       };
 
-      // Use await directly with ipcRenderer.invoke and catch any errors.
       await ipcRenderer.invoke('create-file', fileDetails);
 
-      return 'File Pulled'; // Resolving the promise with a success message.
+      return;
     } catch (error) {
-      throw error; // Rethrow the error so that it can be caught in the parent function.
+      throw error;
     }
   };
 
-  generateDiffActions() {
-    return new Promise(async (resolve, reject) => {
-      await this.onScan()
+  async generateActions() {
+    try {
+      await this.onScan();
       await this.onRemote();
-
       this.actions = [];
-
       // Calculate files to push (local files not in the remote)
       const filesToPush = this.localFiles.filter(
         (localFile: any) =>
@@ -156,8 +151,10 @@ export class vcService {
           createdtime: file.createdtime
         });
       });
-      resolve('Done Generating Actions');
-    });
+      return;
+    } catch {
+      (err: any) => console.log(err);
+    }
   }
 
   async sync() {
@@ -173,11 +170,11 @@ export class vcService {
 
   async fullService() {
     try {
-      await this.generateDiffActions();
+      await this.generateActions();
       await this.sync();
-      await this.generateDiffActions();
-    } catch (error) {
-      console.error('An error occurred:', error);
+      await this.generateActions();
+    } catch (err) {
+      console.log(err);
     }
   }
 }

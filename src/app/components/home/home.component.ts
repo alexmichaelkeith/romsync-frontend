@@ -36,7 +36,7 @@ export class HomeComponent implements OnInit {
   }
 
   onDiff = async () => {
-    this.vcService.generateDiffActions()
+    this.vcService.generateActions();
   };
 
   ngOnInit() {

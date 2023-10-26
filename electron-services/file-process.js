@@ -7,8 +7,6 @@ const utimes = util.promisify(require("utimes").utimes);
 // Function to create a file within a directory
 
 async function createFile(fileDetails) {
-
-  
   try {
     const response = await axios({
       method: "get",
@@ -44,7 +42,6 @@ async function createFile(fileDetails) {
 
 async function readFile(path) {
   try {
-    // Read the file content and file stats concurrently using Promise.all
     const [fileContent, fileStats] = await Promise.all([
       fs.promises.readFile(path),
       fs.promises.stat(path),
@@ -59,7 +56,6 @@ async function readFile(path) {
   }
 }
 
-// Function to remove a file within a directory
 async function removeFile(directoryPath, fileName) {
   try {
     const filePath = path.join(directoryPath, fileName);
@@ -74,9 +70,7 @@ async function removeFile(directoryPath, fileName) {
 }
 
 async function scanDirectory(directoryPath) {
-
-  return new Promise(async (resolve, reject) =>
-  {
+try{
     const files = await fs.promises.readdir(directoryPath);
     const fileDetails = [];
 
@@ -88,13 +82,16 @@ async function scanDirectory(directoryPath) {
           fileName: file,
           path: filePath,
           lastModified: stats.mtime.toString(),
-          createdtime: stats.birthtime.toString(), //possible issue on linux
+          createdtime: stats.birthtime.toString(),
           fileSizeBytes: stats.size
         });
       }
     }
-    resolve(fileDetails)
-  })
+    return fileDetails
+  }
+  catch{
+    err=>console.log(err)
+  }
 }
 
 module.exports = { scanDirectory, removeFile, createFile, readFile };
