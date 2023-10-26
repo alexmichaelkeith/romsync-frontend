@@ -157,13 +157,17 @@ export class vcService {
           !this.filetypes.includes('.' + file.fileName.split('.').pop())
       );
       const trackedNames = this.tracked.map((file: any) => file.fileName);
-
-      this.untracked = combinedArray.filter(
-        (file: any) =>
+      combinedArray.forEach((file: any) => {
+        if (
           !trackedNames.includes(file.fileName) &&
+          !untrackedNames.includes(file.fileName) &&
           (this.filetypes.includes(file.fileName.split('.').pop()) ||
             this.filetypes.includes('.' + file.fileName.split('.').pop()))
-      );
+        ) {
+          this.untracked.push(file);
+          untrackedNames.push(file.fileName);
+        }
+      });
 
       // Calculate files to push (local files not in the remote)
       const filesToPush = this.localFiles.filter(

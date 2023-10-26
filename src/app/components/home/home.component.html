@@ -36,13 +36,12 @@
     <div class="untracked">
       <div class="title">Untracked</div>
       <div class="list">
-        <div class="file">
-          <div
-            *ngFor="let file of getvcService().untracked"
-            (click)="this.onUntrackedClick(file)"
-          >
-            {{ file.fileName }}
-          </div>
+        <div
+          class="file"
+          *ngFor="let file of getvcService().untracked"
+          (click)="this.onUntrackedClick(file)"
+        >
+          {{ file.fileName }}
         </div>
         <div class="reason">
           <div *ngFor="let file of getvcService().untracked">
