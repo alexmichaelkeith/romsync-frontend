@@ -16,7 +16,6 @@ export class SettingsComponent {
       this.selectedOption = 'General';
     } else if (option == 'Appearance') {
       this.selectedOption = 'Appearance';
-      //this.settingsService.saveSetting('testOption','savedSetting')
     } else if (option == 'File System') {
       this.selectedOption = 'File System';
     } else if (option == 'About') {
