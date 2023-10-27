@@ -15,14 +15,12 @@ export class CronService {
   sync: any;
 
   startCron() {
-    console.log('cronin');
     clearInterval(this.refresh);
     clearInterval(this.sync);
     const refreshFrequency =
       parseInt(this.settingsService.getSetting('refresh')) * 60000 || 0;
     const syncFrequency =
       parseInt(this.settingsService.getSetting('sync')) * 60000 || 0;
-    console.log(refreshFrequency);
     this.refresh = setInterval(async () => {
       this.vcService.generateActions();
     }, refreshFrequency);

@@ -4,7 +4,7 @@ const {
   scanDirectory,
   createFile,
   readFile
-} = require("./electron-services/file-process");
+} = require("./file-process");
 let tray;
 
 let isWin = process.platform === "win32";
@@ -44,6 +44,10 @@ app.on("ready", () => {
   tray.on("click", () => {
     trayClick();
   });
+
+
+
+// IPC handling for requests from Angular
 
   ipcMain.on("minimize-main-window", event => {
     minimizeApp();

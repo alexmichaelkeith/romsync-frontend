@@ -5,24 +5,24 @@
   <div class="listings">
     <div class="tracked">
       <div class="title">Tracked</div>
-      <ul class="list">
-        <li
+      <div class="list">
+        <div
           class="file"
           *ngFor="let file of getvcService().tracked"
           (click)="onTrackedClick(file)"
         >
           {{ file.fileName }}
-        </li>
-      </ul>
+        </div>
+      </div>
     </div>
 
     <div class="actions">
       <div class="title">Actions</div>
-      <ul class="list">
-        <li *ngFor="let action of getvcService().actions">
+      <div class="list">
+        <div class="action" *ngFor="let action of getvcService().actions">
           {{ action.fileName }} [{{ action.action }}]
-        </li>
-      </ul>
+        </div>
+      </div>
       <div class="buttons">
         <div class="refresh">
           <div (click)="onDiff()">Manual Refresh</div>
