@@ -15,15 +15,29 @@
     </div>
     <button type="submit">Submit</button>
   </form>
-  <form (ngSubmit)="onCronSetting()">
+  <form (ngSubmit)="onRefreshSetting()">
     <div class="form-group">
-      <label for="cron">Timed scan in minutes:</label>
+      <label for="refresh">Refresh actions in minutes:</label>
       <input
-        placeholder="{{ this.cron }}"
+        placeholder="{{ this.refresh }}"
         type="text"
-        id="cron"
-        name="cron"
-        [(ngModel)]="this.cron"
+        id="refresh"
+        name="refresh"
+        [(ngModel)]="this.refresh"
+      />
+    </div>
+    <button type="submit">Submit</button>
+  </form>
+
+  <form (ngSubmit)="onSyncSetting()">
+    <div class="form-group">
+      <label for="sync">Sync actions in minutes:</label>
+      <input
+        placeholder="{{ this.refresh }}"
+        type="text"
+        id="sync"
+        name="sync"
+        [(ngModel)]="this.sync"
       />
     </div>
     <button type="submit">Submit</button>

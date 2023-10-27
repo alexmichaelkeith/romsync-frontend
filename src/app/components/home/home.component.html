@@ -1,6 +1,6 @@
 <div class="home-container">
-  <div class="settings">
-    <a routerLink="/settings">Settings</a>
+  <div class="header">
+    <div class="logout" (click)="onLogOut()">Log Out</div>
   </div>
   <div class="listings">
     <div class="tracked">
@@ -30,6 +30,7 @@
         <div class="sync">
           <div (click)="onFullService()">Manual Sync</div>
         </div>
+        <a class="settings" routerLink="/settings">Settings</a>
       </div>
     </div>
 
@@ -42,11 +43,6 @@
           (click)="this.onUntrackedClick(file)"
         >
           {{ file.fileName }}
-        </div>
-        <div class="reason">
-          <div *ngFor="let file of getvcService().untracked">
-            {{ file.fileName }}
-          </div>
         </div>
       </div>
     </div>

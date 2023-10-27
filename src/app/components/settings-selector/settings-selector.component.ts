@@ -15,7 +15,8 @@ export class SettingsSelectorComponent {
   ) {}
 
   directory: string = this.settingsService.getSetting('directory');
-  cron: number = parseInt(this.settingsService.getSetting('cron') || '0');
+  refresh: number = parseInt(this.settingsService.getSetting('refresh') || '0');
+  sync: number = parseInt(this.settingsService.getSetting('sync') || '0');
   filetype: string = '';
 
   @Input()
@@ -28,8 +29,12 @@ export class SettingsSelectorComponent {
   onDirectorySetting() {
     this.settingsService.saveSetting('directory', this.directory);
   }
-  onCronSetting() {
-    this.settingsService.saveSetting('cron', this.cron.toString());
+  onRefreshSetting() {
+    this.settingsService.saveSetting('refresh', this.refresh.toString());
+    this.cronService.startCron();
+  }
+  onSyncSetting() {
+    this.settingsService.saveSetting('sync', this.sync.toString());
     this.cronService.startCron();
   }
   onAddUntrack() {
